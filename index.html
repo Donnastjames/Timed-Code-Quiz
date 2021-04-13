@@ -8,7 +8,7 @@
     <title>Coding Quiz</title>
   </head>
   <body>
-    <div class="container" data-state="visible"></div>
+    <div class="container1" data-state="visible"></div>
     <div id="firstDiv">
         <h1>Coding Quiz Challenge</h1>
             <h3>Try to answer the questions correctly in one minute.  You get one point for each correct answer.  
@@ -19,9 +19,25 @@
         </div>
     </div>
 
-    <div id="secondDiv">
-        <h1>How are you today?</h1>
+    <!-- w3schools.com/js/js_arrays.asp -->
+    <div id="firstQuestion" class="container2">
+        <h2>What are used to store multiple values in a single variable?</h2>
+        <div class="answerButton">
+          <button class="incorrectAnswer">Objects</button>
+        </div>
+        <div class="answerButton">
+          <button class="correctAnswer">Arrays</button>
+        </div>
+        <div class="answerButton">
+          <button class="incorrectAnswer">Elements</button>
+        </div>
+        <div class="answerButton">
+          <button class="incorrectAnswer">Variables</button>
+        </div>
+        <div id="boxCorrectMsg" data-text="Correct Answer!" data-state="hidden"></div>
+        <div id="boxIncorreMsg" data-text="Incorrect Answer" data-state="hidden"></div>
     </div>
+    
     
     
     <!--

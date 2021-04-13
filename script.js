@@ -16,18 +16,18 @@
 //   }
 // }); 
 
-
+const container2 = document.querySelector(".container2");
 
 const startQuizButton = document.querySelector(".start-button");
-const quizQuestions = document.getElementById('.questions');
+const answerButton = document.getElementById('.questions');
 
 startQuizButton.addEventListener("click", function(event) {
     console.log('START: startQuizButton.click()');
     var firstDivElement = document.getElementById('firstDiv');
-    var secondDivElement = document.getElementById('secondDiv');
+    var firstQuestion = document.getElementById('firstQuestion');
 
     firstDivElement.style.display = 'none';
-    secondDivElement.style.display = 'block';
+    firstQuestion.style.display = 'block';
     // var element = event.target;
 
     // if (element.matches(".container")) {

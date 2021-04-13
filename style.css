@@ -16,10 +16,16 @@ h1 {
   color: #001b44;
 }
 
-h3 {
+h2 {
     text-align: center;
     margin-top: 40px auto;
     color: #001b44;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 40px auto;
+  color: #001b44;
 }
 
 button {
@@ -33,37 +39,102 @@ button {
     margin-right: auto;
     margin-left: auto;
 }
-
-.container {
-  width: 80vw;
-  margin: 25px auto;
-}
-.box {
+/*
+.answerButton {
   display: block;
-  /*float: left;*/
-  width: 31%;
-  height: 200px;
+  width: 20%;
+  height: 52px;
   margin: 1%;
   cursor: pointer;
   object-fit: cover;
   border-radius: 8px;
   background-color: #093145;
   text-align: center;
-  line-height: 200px;
-  font-size: 150px;
+  line-height: 50px;
+  font-size: 17px;
+  color: whitesmoke;
+}
+*/
+.container1 {
+  width: 80vw;
+  margin: 25px auto;
+}
+
+.container2 {
+  width: 80vw;
+  margin: 25px auto;
+}
+
+/*
+.boxCorrectAnswer {
+  display: block;
+  width: 20%;
+  height: 52px;
+  margin: 1%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #093145;
+  text-align: center;
+  line-height: 50px;
+  font-size: 17px;
   color: whitesmoke;
 }
 
+.boxIncorrectAnswer {
+  display: block;
+  width: 20%;
+  height: 52px;
+  margin: 1%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 8px;
+  background-color: #093145;
+  text-align: center;
+  line-height: 50px;
+  font-size: 17px;
+  color: whitesmoke;
+}
+*/
+#boxCorrectMsg {
+  display: block;
+  width: 10%;
+  height: 52px;
+  margin: 1%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 26px;
+  color: #093145;
+}
+
+#boxIncorrectMsg {
+  display: block;
+  width: 10%;
+  height: 52px;
+  margin: 1%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 26px;
+  color: #093145;
+}
+
+/*
 @media (max-width: 740px) {
-  .box {
+  .boxPossibleAnswer1, .boxPossibleAnswer2, .boxPossibleAnswer3, .boxPossibleAnswer4 {
     width: 48%;
   }
-}
+}*/
 
 #firstDiv {
   display: block;
 }
 
-#secondDiv {
+#firstQuestion {
   display: none;
 }
