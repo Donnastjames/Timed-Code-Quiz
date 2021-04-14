@@ -1,73 +1,76 @@
-// //var container = document.querySelector(".container");
+// Start with variables that are used to keep track of
+// our progress taking this quiz ...
 
-// container.addEventListener("click", function(event) {
-//   var element = event.target;
+var questionIndex = 0;
 
-//   // TODO: Complete function
-//   if (element.matches(".box")) {
-//     if(element.dataset.state === "hidden"){
-//       element.dataset.state = "visible";
-//       element.textContent = element.dataset.number;
-//     }
-//     else {
-//       element.dataset.state = "hidden";
-//       element.textContent = "";
-//     }
-//   }
-// }); 
+var myQuizQuestions = [
+  {
+      question: "What are used to store multiple values in a single variable?",
+      possibleAnswers: ["Objects", "Arrays", "Elements", "Variables"],
+      correctAnswer: "Arrays",
+  },
+  {
+      question: "What are variables that can contain many values?",
+      possibleAnswers: ["Function", "Element", "Variable", "Object"],
+      correctAnswer: "Object",
+  },
+  {
+      question: "What is a block of code designed to perform a particular task?",
+      possibleAnswers: ["Function", "Element", "Variable", "Object"],
+      correctAnswer: "Function",
+  },
+  {
+      question: "What is a block of code designed to perform a particular task?",
+      possibleAnswers: ["Function", "Element", "Variable", "Object"],
+      correctAnswer: "Variable",
+  },
+];
 
-var container2 = document.querySelector(".container2");
+var totalCorrectScoreCount = 0;
 
+// The following section will contain general helper routines ...
+
+// https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+      parent.removeChild(parent.firstChild);
+  }
+}
+
+// The following will contain elements that I need to
+// keep track of, and respond to their click events ...
+
+var introDivElement = document.getElementById("introDiv");
 var startQuizButton = document.querySelector(".start-button");
-var answerButton = document.getElementById('.questions');
 
-var timerElement = document.getElementById('countdown');
-var mainElement = document.getElementById('main');
+var boxQuestionElement = document.getElementById("boxQuestion");
+var correctMsgElement = document.getElementById("boxCorrectMsg");
+var incorrectMsgElment = document.getElementById("boxIncorrectMsg");
 
+// The following code will describe what I want to do when certain
+// things are clicked on ...
 
-// This is the start button that begins the
-// quiz and the countdown
 startQuizButton.addEventListener("click", function(event) {
-    console.log('START: startQuizButton.click()');
-    var firstDivElement = document.getElementById('firstDiv');
-    var firstQuestion = document.getElementById('firstQuestion');
+  introDivElement.style.display = "none";
 
-    firstDivElement.style.display = 'none';
-    firstQuestion.style.display = 'block';
-    // var element = event.target;
+  const currentQuestionObj = myQuizQuestions[questionIndex];
 
-    // if (element.matches(".container")) {
-    //     if (element.dataset.state === "visible") {
-    //         element.dataset.state = "hidden";
-    //     }
-    // }
-    console.log('END: startQuizButton.click()');
+  removeAllChildNodes(boxQuestionElement);
+  var questionTextNode = document.createTextNode(currentQuestionObj.question);
+  boxQuestionElement.appendChild(questionTextNode);
 
-    // Timer that counts down from 60 seconds
+  // https://stackoverflow.com/questions/48247532/create-an-array-of-buttons-javascript
+  for (let i = 0; i < currentQuestionObj.possibleAnswers.length; i += 1) {
+    var btn = document.createElement("button");
+    var buttonTextNode = document.createTextNode(currentQuestionObj.possibleAnswers[i]);
+    btn.appendChild(buttonTextNode);
+    boxQuestionElement.appendChild(btn);
+    // TODO MAYBE? Add event listeners, incorrectClick() and correctClick(),
+  }
 
-    console.log('START: countdown()');
-    var timeLeft = 60;
+  boxQuestionElement.style.display = "block";
 
-    // Use the `setInterval()` method to call a function to be executed every 1000 milliseconds
-    var timeInterval = setInterval(function () {
-        // As long as the `timeLeft` is greater than 1
-        if (timeLeft > 1) {
-        // Set the `textContent` of `timerElement` to show the remaining seconds
-        timerElement.textContent = timeLeft + ' seconds remaining';
-        // Decrement `timeLeft` by 1
-        timeLeft--;
-        } else if (timeLeft === 1) {
-        // When `timeLeft` is equal to 1, rename to 'second' instead of 'seconds'
-        timerElement.textContent = timeLeft + ' second remaining';
-        timeLeft--;
-        } else {
-        // Once `timeLeft` gets to 0, set `timerEl` to an empty string
-        timerElement.textContent = '';
-        // Use `clearInterval()` to stop the timer
-        clearInterval(timeInterval);
-        // Call the `displayMessage()` function
-        //displayMessage();
-        }
-        console.log('END: startcountdown()');
-    }, 1000);
-})
+
+  // correctMsgElement.style.display = "block";
+  // incorrectMsgElment.style.display = "block";
+});

@@ -103,8 +103,22 @@ button {
   color: whitesmoke;
 }
 */
+#boxQuestion {
+  display: none;
+  width: 100%;
+  height: 52px;
+  margin: 1%;
+  cursor: pointer;
+  object-fit: cover;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 26px;
+  color: #093145;
+}
+
 #boxCorrectMsg {
-  display: block;
+  display: none;
   width: 10%;
   height: 52px;
   margin: 1%;
@@ -118,7 +132,7 @@ button {
 }
 
 #boxIncorrectMsg {
-  display: block;
+  display: none;
   width: 10%;
   height: 52px;
   margin: 1%;
@@ -138,10 +152,10 @@ button {
   }
 }*/
 
-#firstDiv {
+#introDiv {
   display: block;
 }
 
 #firstQuestion {
-  display: none;
+  display: block;
 }
