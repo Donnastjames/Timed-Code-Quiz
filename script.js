@@ -1,6 +1,6 @@
 // Wait 2 milliseconds after answering a question,
 // so the user has time to see whether their answer was correct ... 
-const PAUSE_BEFORE_MOVING_ON = 2000;
+const PAUSE_BEFORE_MOVING_ON = 1500;
 
 // Start with variables that are used to keep track of
 // our progress taking this quiz ...
@@ -31,6 +31,9 @@ var myQuizQuestions = [
 ];
 
 var totalCorrectScoreCount = 0;
+var timerEl = document.getElementById("countdown");
+var timerBoxElement = document.getElementById("timerBox");
+var timeLeft = 30;
 
 // The following will contain elements that I need to
 // keep track of, and respond to their click events ...
@@ -83,6 +86,10 @@ function onIncorrectClicked() {
   PAUSE_BEFORE_MOVING_ON);
 }
 
+function introDivElement () {
+    timerBoxElement.style.display = "none";
+}
+
 function displayCurrentQuestion() {
   // If ever we are displaying a question, we don't want to
   // be displaying the introDivElement ...
@@ -92,6 +99,7 @@ function displayCurrentQuestion() {
   // Further ...
   correctMsgElement.style.display = "none";
   incorrectMsgElment.style.display = "none";
+  timerBoxElement.style.display = "block";
 
   if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
     throw new Error('displayCurrentQuestion() called with an index out of range:', questionIndex);
@@ -134,7 +142,31 @@ function displayDoneWithQuiz() {
   incorrectMsgElment.style.display = "none";
 }
 
-// The following code will describe what I want to do when certain
-// things are clicked on ...
+// Function that calls the timer 
+function countdown() {
+    timeLeft = 30;
+    var timeInterval = setInterval(function () {
+      if (timeLeft > 1) {
+        timerEl.textContent = timeLeft + ' seconds remaining';
+        timeLeft--;
+      } else if (timeLeft === 1) {
+        timerEl.textContent = timeLeft + ' second remaining';
+        timeLeft--;
+      } else {
+        timerEl.textContent = '';
+        clearInterval(timeInterval);
+        displayDoneWithQuiz();
+      }
+    //   if (questionIndex < myQuizQuestions.length) {
+    //       timerEl.textContent = '';
+    //       clearInterval(timeInterval);
+    //       displayDoneWithQuiz();
+    //   }
+    }, 1000);
+  }
+
+
+// The following code will start the quiz ...
 
 startQuizButton.addEventListener("click", displayCurrentQuestion);
+startQuizButton.addEventListener("click", countdown);
