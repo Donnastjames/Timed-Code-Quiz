@@ -49,6 +49,10 @@ var correctMsgElement = document.getElementById("boxCorrectMsg");
 var incorrectMsgElement = document.getElementById("boxIncorrectMsg");
 
 var finalScoreElement = document.querySelector(".score");
+var submitButton = document.getElementById("submit");
+var playerInitialsInput = document.getElementById("initials");
+
+var msgDiv = document.getElementById("msg");
 
 
 // The following section will contain general helper routines ...
@@ -163,26 +167,58 @@ function displayDoneWithQuiz() {
 
 // Function that calls the timer 
 function countdown() {
-    timeLeft = 30;
-    var timeInterval = setInterval(function () {
-      if (timeLeft > 1) {
-        timerElement.textContent = timeLeft + ' seconds remaining';
-        timeLeft--;
-      } else if (timeLeft === 1) {
-        timerElement.textContent = timeLeft + ' second remaining';
-        timeLeft--;
-      } else {
-        timerElement.textContent = '';
-        clearInterval(timeInterval);
-        displayDoneWithQuiz();
-      }
-      if (questionIndex > myQuizQuestions.length) {
-        timerElement.textContent = '';  
-        clearInterval(timeInterval);
-        displayDoneWithQuiz();
-      }
-    }, 1000);
+  timeLeft = 30;
+  var timeInterval = setInterval(function () {
+    if (timeLeft > 1) {
+      timerElement.textContent = timeLeft + ' seconds remaining';
+      timeLeft--;
+    } else if (timeLeft === 1) {
+      timerElement.textContent = timeLeft + ' second remaining';
+      timeLeft--;
+    } else {
+      timerElement.textContent = '';
+      clearInterval(timeInterval);
+      displayDoneWithQuiz();
+    }
+    if (questionIndex > myQuizQuestions.length) {
+      timerElement.textContent = '';  
+      clearInterval(timeInterval);
+      displayDoneWithQuiz();
+    }
+  }, 1000);
+}
+
+  function displayMessage(type, message) {
+    msgDiv.textContent = message;
+    msgDiv.setAttribute("class", type);
   }
+
+  function renderLastInformation() {
+    var initials = localStorage.getItem("initials");
+
+    if(!initials) {
+        return;
+    }
+
+    playerInitialsInput.textContent = initials;
+  }
+
+  submitButton.addEventListener("click", function(event) {
+    console.log('submitButton.click()'); 
+    var submittedInitials = playerInitialsInput.value;
+    console.log('submittedInitials:', submittedInitials);
+      
+    if (submittedInitials === "") {
+      displayMessage("Error", "Initials cannot be blank");
+    } else {
+      displayMessage("Success", "Registered successfully");
+
+      localStorage.setItem("initials", submittedInitials);
+      console.log('localStorage.getItem("initials")', localStorage.getItem("initials"));
+      renderLastInformation();
+      console.log('submitButton.click() finished!');
+    }
+  });
 
 // The following code will start the quiz ...
 
