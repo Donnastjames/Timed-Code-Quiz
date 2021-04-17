@@ -1,7 +1,6 @@
 // Wait 2 milliseconds after answering a question,
 // so the user has time to see whether their answer was correct ... 
 const PAUSE_BEFORE_MOVING_ON = 1500;
-
 // Start with variables that are used to keep track of
 // our progress taking this quiz ...
 
@@ -15,8 +14,8 @@ var myQuizQuestions = [
   },
   {
       question: "What are variables that can contain many values?",
-      possibleAnswers: ["Function", "Element", "Variable", "Object"],
-      correctAnswer: "Object",
+      possibleAnswers: ["Function", "Element", "Variable", "Objects"],
+      correctAnswer: "Objects",
   },
   {
       question: "What is a block of code designed to perform a particular task?",
@@ -31,7 +30,7 @@ var myQuizQuestions = [
 ];
 
 var totalCorrectScoreCount = 0;
-var timerEl = document.getElementById("countdown");
+var timerElement = document.getElementById("countdown");
 var timerBoxElement = document.getElementById("timerBox");
 var timeLeft = 30;
 
@@ -46,6 +45,9 @@ var boxDoneWithQuizElement = document.getElementById("boxDoneWithQuiz");
 
 var correctMsgElement = document.getElementById("boxCorrectMsg");
 var incorrectMsgElment = document.getElementById("boxIncorrectMsg");
+
+var finalScore = document.querySelector(".score");
+
 
 // The following section will contain general helper routines ...
 
@@ -140,6 +142,7 @@ function displayDoneWithQuiz() {
   // Further ...
   correctMsgElement.style.display = "none";
   incorrectMsgElment.style.display = "none";
+  timerElement.style.display = "none";
 }
 
 // Function that calls the timer 
@@ -147,23 +150,45 @@ function countdown() {
     timeLeft = 30;
     var timeInterval = setInterval(function () {
       if (timeLeft > 1) {
-        timerEl.textContent = timeLeft + ' seconds remaining';
+        timerElement.textContent = timeLeft + ' seconds remaining';
         timeLeft--;
       } else if (timeLeft === 1) {
-        timerEl.textContent = timeLeft + ' second remaining';
+        timerElement.textContent = timeLeft + ' second remaining';
         timeLeft--;
       } else {
-        timerEl.textContent = '';
+        timerElement.textContent = '';
         clearInterval(timeInterval);
         displayDoneWithQuiz();
       }
-    //   if (questionIndex < myQuizQuestions.length) {
-    //       timerEl.textContent = '';
-    //       clearInterval(timeInterval);
-    //       displayDoneWithQuiz();
-    //   }
+      if (questionIndex > myQuizQuestions.length) {
+        timerElement.textContent = '';  
+        clearInterval(timeInterval);
+        displayDoneWithQuiz();
+      }
     }, 1000);
   }
+
+
+// Function that updates the score count and saves the count to local storage
+// function saveScore() {
+//     console.log("saveScore");
+//     localStorage.setItem("saveScore", totalCorrectScoreCount);
+// }
+
+
+// // Gets the stored value in local storage 
+// function getSavedScore() {
+//     console.log("getSavedScore");
+//     var storedScores = localStorage.getItem("saveScore");
+//     if (storedScores === null) {
+//         totalCorrectScoreCount = 0;
+//     } else {
+//         totalCorrectScoreCount = storedScores;
+//     }
+    
+//     // Display total score
+//     score.textContent = storedScores;
+// }
 
 
 // The following code will start the quiz ...
