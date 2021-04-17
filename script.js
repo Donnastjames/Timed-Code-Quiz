@@ -34,6 +34,8 @@ var timerElement = document.getElementById("countdown");
 var timerBoxElement = document.getElementById("timerBox");
 var timeLeft = 30;
 
+var currentlyHandlingClick = false;
+
 // The following will contain elements that I need to
 // keep track of, and respond to their click events ...
 
@@ -59,6 +61,11 @@ function removeAllChildNodes(parent) {
 }
 
 function onCorrectClicked() {
+ // Fixed the problem of clicking too many answers before the next question loads 
+  if (currentlyHandlingClick) {
+  return;
+  }
+  currentlyHandlingClick = true;
   console.log('onCorrectClicked()');
   totalCorrectScoreCount += 1;
   questionIndex += 1;
@@ -74,8 +81,13 @@ function onCorrectClicked() {
 }
 
 function onIncorrectClicked() {
+  if (currentlyHandlingClick) {
+    return;
+  }
+  currentlyHandlingClick = true;
   console.log('onIncorrectClicked()');
-  // TODO: subtract from timer
+  // Impose a penalty for clicking an incorrect answer ...
+  timeLeft = Math.max(0, timeLeft - 5);
   questionIndex += 1;
   incorrectMsgElment.style.display = "block";
   setTimeout(function() {
@@ -129,6 +141,7 @@ function displayCurrentQuestion() {
 
   // Always make sure we are showing the Question before we're done here ...
   boxQuestionElement.style.display = "block";
+  currentlyHandlingClick = false;
 }
 
 function displayDoneWithQuiz() {
@@ -143,6 +156,7 @@ function displayDoneWithQuiz() {
   correctMsgElement.style.display = "none";
   incorrectMsgElment.style.display = "none";
   timerElement.style.display = "none";
+  currentlyHandlingClick = false;
 }
 
 // Function that calls the timer 
@@ -167,29 +181,6 @@ function countdown() {
       }
     }, 1000);
   }
-
-
-// Function that updates the score count and saves the count to local storage
-// function saveScore() {
-//     console.log("saveScore");
-//     localStorage.setItem("saveScore", totalCorrectScoreCount);
-// }
-
-
-// // Gets the stored value in local storage 
-// function getSavedScore() {
-//     console.log("getSavedScore");
-//     var storedScores = localStorage.getItem("saveScore");
-//     if (storedScores === null) {
-//         totalCorrectScoreCount = 0;
-//     } else {
-//         totalCorrectScoreCount = storedScores;
-//     }
-    
-//     // Display total score
-//     score.textContent = storedScores;
-// }
-
 
 // The following code will start the quiz ...
 
