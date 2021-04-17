@@ -46,9 +46,9 @@ var boxQuestionElement = document.getElementById("boxQuestion");
 var boxDoneWithQuizElement = document.getElementById("boxDoneWithQuiz");
 
 var correctMsgElement = document.getElementById("boxCorrectMsg");
-var incorrectMsgElment = document.getElementById("boxIncorrectMsg");
+var incorrectMsgElement = document.getElementById("boxIncorrectMsg");
 
-var finalScore = document.querySelector(".score");
+var finalScoreElement = document.querySelector(".score");
 
 
 // The following section will contain general helper routines ...
@@ -89,7 +89,7 @@ function onIncorrectClicked() {
   // Impose a penalty for clicking an incorrect answer ...
   timeLeft = Math.max(0, timeLeft - 5);
   questionIndex += 1;
-  incorrectMsgElment.style.display = "block";
+  incorrectMsgElement.style.display = "block";
   setTimeout(function() {
     if (questionIndex < myQuizQuestions.length) {
       displayCurrentQuestion();
@@ -112,7 +112,7 @@ function displayCurrentQuestion() {
   boxDoneWithQuizElement.style.display = "none";
   // Further ...
   correctMsgElement.style.display = "none";
-  incorrectMsgElment.style.display = "none";
+  incorrectMsgElement.style.display = "none";
   timerBoxElement.style.display = "block";
 
   if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
@@ -151,10 +151,12 @@ function displayDoneWithQuiz() {
   // And we don't want to show the question box either ...
   boxQuestionElement.style.display = "none";
   // We want to display the "all done" box ...
+  finalScoreElement.textContent = totalCorrectScoreCount;
   boxDoneWithQuizElement.style.display = "block";
+  
   // Further ...
   correctMsgElement.style.display = "none";
-  incorrectMsgElment.style.display = "none";
+  incorrectMsgElement.style.display = "none";
   timerElement.style.display = "none";
   currentlyHandlingClick = false;
 }
