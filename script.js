@@ -207,8 +207,9 @@ function countdown() {
       console.log('localStorage.setItem("initials")'); 
       localStorage.setItem("score", totalCorrectScoreCount);
       console.log('localStorage.setItem("score")'); 
-      console.log('submitButton.click() finished!');
+      displayHighScorePage();
     }
+    console.log('submitButton.click() finished!');
   });
 
   function displayHighScorePage() {
@@ -230,8 +231,6 @@ function countdown() {
     playerHighScoreElement.textContent = score;
   }
 
-// The following code will display the highScorePage ...
-submitButton.addEventListener("click", displayHighScorePage);
 // The following code will start the quiz ...
 startQuizButton.addEventListener("click", displayCurrentQuestion);
 startQuizButton.addEventListener("click", countdown);
