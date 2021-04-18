@@ -53,6 +53,7 @@ var submitButton = document.getElementById("submit");
 var playerInitialsInput = document.getElementById("initials");
 
 var msgDiv = document.getElementById("msg");
+var highScorePageElement = document.getElementById("highScorePage");
 
 
 // The following section will contain general helper routines ...
@@ -193,16 +194,6 @@ function countdown() {
     msgDiv.setAttribute("class", type);
   }
 
-  function renderLastInformation() {
-    var initials = localStorage.getItem("initials");
-
-    if(!initials) {
-        return;
-    }
-
-    playerInitialsInput.textContent = initials;
-  }
-
   submitButton.addEventListener("click", function(event) {
     console.log('submitButton.click()'); 
     var submittedInitials = playerInitialsInput.value;
@@ -214,11 +205,34 @@ function countdown() {
       displayMessage("Success", "Registered successfully");
 
       localStorage.setItem("initials", submittedInitials);
-      console.log('localStorage.getItem("initials")', localStorage.getItem("initials"));
-      renderLastInformation();
+      console.log('localStorage.setItem("initials")'); 
+      localStorage.setItem("score", totalCorrectScoreCount);
+      console.log('localStorage.setItem("score")'); 
       console.log('submitButton.click() finished!');
     }
   });
+
+  function displayHighScorePage() {
+    highScorePageElement.style.display = "block";
+    boxDoneWithQuizElement.style.display = "none";
+    
+    var initials = localStorage.getItem("initials");
+    console.log('localStorage.getItem.initials', initials);
+    var score = localStorage.getItem("score");
+    console.log('localStorage.getItem("score")', score);
+    if(!initials) {
+        return;
+    }
+
+    renderedInitialsElement = document.getElementById("renderedInitials");
+    playerHighScoreElement = document.getElementById("yourScore");
+
+    renderedInitialsElement.textContent = initials;
+    playerHighScoreElement.textContent = score;
+  }
+
+// TO DO: Add event listener to go to the high score page
+submitButton.addEventListener("click", displayHighScorePage);
 
 // The following code will start the quiz ...
 
