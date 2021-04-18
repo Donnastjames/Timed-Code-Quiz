@@ -2,7 +2,7 @@
 // so the user has time to see whether their answer was correct ... 
 const PAUSE_BEFORE_MOVING_ON = 1500;
 // Start with variables that are used to keep track of
-// our progress taking this quiz ...
+// the progress taking this quiz ...
 
 var questionIndex = 0;
 
@@ -33,6 +33,7 @@ var totalCorrectScoreCount = 0;
 var timerElement = document.getElementById("countdown");
 var timerBoxElement = document.getElementById("timerBox");
 var timeLeft = 30;
+var timeLeftInterval = null;
 
 var currentlyHandlingClick = false;
 
@@ -110,10 +111,10 @@ function introDivElement () {
 }
 
 function displayCurrentQuestion() {
-  // If ever we are displaying a question, we don't want to
+  // If ever quiz is displaying a question, it should not
   // be displaying the introDivElement ...
   introDivElement.style.display = "none";
-  // And we don't want to be displaying the "all done" box either ...
+  // Or the "all done" box either ...
   boxDoneWithQuizElement.style.display = "none";
   // Further ...
   correctMsgElement.style.display = "none";
@@ -144,21 +145,22 @@ function displayCurrentQuestion() {
     }
   }
 
-  // Always make sure we are showing the Question before we're done here ...
+  // Always make sure the Question is showing before the quiz is done ...
   boxQuestionElement.style.display = "block";
   currentlyHandlingClick = false;
 }
 
 function displayDoneWithQuiz() {
-  // If we are done with our quiz, we don't want to
-  // be displaying the introDivElement ...
+  // The timer must not show if displaying
+  // "Done with Quiz" block ...
+  clearInterval(timeLeftInterval);
+  // introDiv must not display if the quiz is done...
   introDivElement.style.display = "none";
-  // And we don't want to show the question box either ...
+  // or the Question box...
   boxQuestionElement.style.display = "none";
-  // We want to display the "all done" box ...
+  // Display "all done" box ...
   finalScoreElement.textContent = totalCorrectScoreCount;
   boxDoneWithQuizElement.style.display = "block";
-  
   // Further ...
   correctMsgElement.style.display = "none";
   incorrectMsgElement.style.display = "none";
@@ -169,21 +171,18 @@ function displayDoneWithQuiz() {
 // Function that calls the timer 
 function countdown() {
   timeLeft = 30;
-  var timeInterval = setInterval(function () {
-    if (timeLeft > 1) {
-      timerElement.textContent = timeLeft + ' seconds remaining';
-      timeLeft--;
-    } else if (timeLeft === 1) {
-      timerElement.textContent = timeLeft + ' second remaining';
-      timeLeft--;
+  timeLeftInterval = setInterval(function () {
+    const stillTakingQuiz = (timeLeft > 0) && (0 <= questionIndex) && (questionIndex < myQuizQuestions.length);
+
+    if (stillTakingQuiz) {
+      timeLeft -= 1;
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+      // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
+      timerElement.textContent = `${timeLeft} second${timeLeft === 1 ? '' : 's'} remaining`;
     } else {
       timerElement.textContent = '';
-      clearInterval(timeInterval);
-      displayDoneWithQuiz();
-    }
-    if (questionIndex > myQuizQuestions.length) {
-      timerElement.textContent = '';  
-      clearInterval(timeInterval);
+      clearInterval(timeLeftInterval);
+      timeLeftInterval = null;
       displayDoneWithQuiz();
     }
   }, 1000);
@@ -231,10 +230,8 @@ function countdown() {
     playerHighScoreElement.textContent = score;
   }
 
-// TO DO: Add event listener to go to the high score page
+// The following code will display the highScorePage ...
 submitButton.addEventListener("click", displayHighScorePage);
-
 // The following code will start the quiz ...
-
 startQuizButton.addEventListener("click", displayCurrentQuestion);
 startQuizButton.addEventListener("click", countdown);
