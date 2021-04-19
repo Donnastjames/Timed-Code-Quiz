@@ -1,6 +1,10 @@
 // Wait 2 milliseconds after answering a question,
 // so the user has time to see whether their answer was correct ... 
 const PAUSE_BEFORE_MOVING_ON = 1500;
+
+// Allow 30 seconds for the user to take the quiz ...
+const TIME_ALLOWED_FOR_TAKING_QUIZ = 30; // seconds
+
 // Start with variables that are used to keep track of
 // the progress taking this quiz ...
 
@@ -32,7 +36,7 @@ var myQuizQuestions = [
 var totalCorrectScoreCount = 0;
 var timerElement = document.getElementById("countdown");
 var timerBoxElement = document.getElementById("timerBox");
-var timeLeft = 30;
+var timeLeft = TIME_ALLOWED_FOR_TAKING_QUIZ;
 var timeLeftInterval = null;
 
 var currentlyHandlingClick = false;
@@ -56,8 +60,18 @@ var playerInitialsInput = document.getElementById("initials");
 var msgDiv = document.getElementById("msg");
 var highScorePageElement = document.getElementById("highScorePage");
 
+var goBackAndRestartButton = document.getElementById("goBack");
+var clearScoreButton = document.getElementById("clearScore");
+
 
 // The following section will contain general helper routines ...
+
+function displayTimeLeft() {
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+  // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
+  timerElement.textContent = `${timeLeft} second${timeLeft === 1 ? '' : 's'} remaining`;
+  timerBoxElement.style.display = "block";
+}
 
 // https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
 function removeAllChildNodes(parent) {
@@ -106,8 +120,17 @@ function onIncorrectClicked() {
   PAUSE_BEFORE_MOVING_ON);
 }
 
-function introDivElement () {
-    timerBoxElement.style.display = "none";
+function displayIntro() {
+  timeLeft = TIME_ALLOWED_FOR_TAKING_QUIZ;
+  clearInterval(timeLeftInterval);
+  timeLeftInterval = null;
+  questionIndex = 0;
+
+  introDivElement.style.display = "block";
+  boxDoneWithQuizElement.style.display = "none";
+  correctMsgElement.style.display = "none";
+  incorrectMsgElement.style.display = "none";
+  highScorePageElement.style.display = "none";
 }
 
 function displayCurrentQuestion() {
@@ -119,7 +142,7 @@ function displayCurrentQuestion() {
   // Further ...
   correctMsgElement.style.display = "none";
   incorrectMsgElement.style.display = "none";
-  timerBoxElement.style.display = "block";
+  displayTimeLeft();
 
   if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
     throw new Error('displayCurrentQuestion() called with an index out of range:', questionIndex);
@@ -164,7 +187,7 @@ function displayDoneWithQuiz() {
   // Further ...
   correctMsgElement.style.display = "none";
   incorrectMsgElement.style.display = "none";
-  timerElement.style.display = "none";
+  timerBoxElement.style.display = "none";
   currentlyHandlingClick = false;
 }
 
@@ -176,9 +199,7 @@ function countdown() {
 
     if (stillTakingQuiz) {
       timeLeft -= 1;
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
-      // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
-      timerElement.textContent = `${timeLeft} second${timeLeft === 1 ? '' : 's'} remaining`;
+      displayTimeLeft();
     } else {
       timerElement.textContent = '';
       clearInterval(timeLeftInterval);
@@ -234,3 +255,6 @@ function countdown() {
 // The following code will start the quiz ...
 startQuizButton.addEventListener("click", displayCurrentQuestion);
 startQuizButton.addEventListener("click", countdown);
+
+// The following code will re-start the quiz ...
+goBackAndRestartButton.addEventListener("click", displayIntro);

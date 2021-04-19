@@ -135,7 +135,7 @@ button {
 }
 
 #timerBox {
-  display: block;
+  display: none;
 }
 
 #totalScore {
