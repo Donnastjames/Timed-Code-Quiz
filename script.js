@@ -66,6 +66,31 @@ var clearScoreButton = document.getElementById("clearScore");
 
 // The following section will contain general helper routines ...
 
+function displayOnlyThisBox(boxElement) {
+  introDivElement.style.display = "none";
+  boxQuestionElement.style.display = "none";
+  boxDoneWithQuizElement.style.display = "none";
+  highScorePageElement.style.display = "none";
+  
+  // When you start to display a new box,
+  // You don't want to be showing either
+  // the correct or incorrect message anymore ...
+  correctMsgElement.style.display = "none";
+  incorrectMsgElement.style.display = "none";
+
+  boxElement.style.display = "block";
+}
+
+function showCorrectMsg() {
+  correctMsgElement.style.display = "block";
+  incorrectMsgElement.style.display = "none";
+}
+
+function showIncorrectMsg() {
+  correctMsgElement.style.display = "none";
+  incorrectMsgElement.style.display = "block";
+}
+
 function displayTimeLeft() {
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
   // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
@@ -83,13 +108,12 @@ function removeAllChildNodes(parent) {
 function onCorrectClicked() {
  // Fixed the problem of clicking too many answers before the next question loads 
   if (currentlyHandlingClick) {
-  return;
+    return;
   }
   currentlyHandlingClick = true;
-  console.log('onCorrectClicked()');
   totalCorrectScoreCount += 1;
   questionIndex += 1;
-  correctMsgElement.style.display = "block";
+  showCorrectMsg();
   setTimeout(function () {
     if (questionIndex < myQuizQuestions.length) {
       displayCurrentQuestion();
@@ -105,11 +129,10 @@ function onIncorrectClicked() {
     return;
   }
   currentlyHandlingClick = true;
-  console.log('onIncorrectClicked()');
   // Impose a penalty for clicking an incorrect answer ...
   timeLeft = Math.max(0, timeLeft - 5);
   questionIndex += 1;
-  incorrectMsgElement.style.display = "block";
+  showIncorrectMsg();
   setTimeout(function() {
     if (questionIndex < myQuizQuestions.length) {
       displayCurrentQuestion();
@@ -125,23 +148,11 @@ function displayIntro() {
   clearInterval(timeLeftInterval);
   timeLeftInterval = null;
   questionIndex = 0;
-
-  introDivElement.style.display = "block";
-  boxDoneWithQuizElement.style.display = "none";
-  correctMsgElement.style.display = "none";
-  incorrectMsgElement.style.display = "none";
-  highScorePageElement.style.display = "none";
+  displayOnlyThisBox(introDivElement);
 }
 
 function displayCurrentQuestion() {
-  // If ever quiz is displaying a question, it should not
-  // be displaying the introDivElement ...
-  introDivElement.style.display = "none";
-  // Or the "all done" box either ...
-  boxDoneWithQuizElement.style.display = "none";
-  // Further ...
-  correctMsgElement.style.display = "none";
-  incorrectMsgElement.style.display = "none";
+  displayOnlyThisBox(boxQuestionElement);
   displayTimeLeft();
 
   if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
@@ -168,26 +179,18 @@ function displayCurrentQuestion() {
     }
   }
 
-  // Always make sure the Question is showing before the quiz is done ...
-  boxQuestionElement.style.display = "block";
   currentlyHandlingClick = false;
 }
 
 function displayDoneWithQuiz() {
-  // The timer must not show if displaying
-  // "Done with Quiz" block ...
+  // The timeLeftInterval's function must not be called after
+  // the displaying the "Done with Quiz" block ...
   clearInterval(timeLeftInterval);
-  // introDiv must not display if the quiz is done...
-  introDivElement.style.display = "none";
-  // or the Question box...
-  boxQuestionElement.style.display = "none";
-  // Display "all done" box ...
+  displayOnlyThisBox(boxDoneWithQuizElement);
   finalScoreElement.textContent = totalCorrectScoreCount;
-  boxDoneWithQuizElement.style.display = "block";
-  // Further ...
-  correctMsgElement.style.display = "none";
-  incorrectMsgElement.style.display = "none";
-  timerBoxElement.style.display = "none";
+  // Don't display any older initials or messages until maybe later...
+  playerInitialsInput.value = '';
+  msgDiv.textContent = '';
   currentlyHandlingClick = false;
 }
 
@@ -215,32 +218,22 @@ function countdown() {
   }
 
   submitButton.addEventListener("click", function(event) {
-    console.log('submitButton.click()'); 
     var submittedInitials = playerInitialsInput.value;
-    console.log('submittedInitials:', submittedInitials);
       
     if (submittedInitials === "") {
       displayMessage("Error", "Initials cannot be blank");
     } else {
-      displayMessage("Success", "Registered successfully");
-
       localStorage.setItem("initials", submittedInitials);
-      console.log('localStorage.setItem("initials")'); 
       localStorage.setItem("score", totalCorrectScoreCount);
-      console.log('localStorage.setItem("score")'); 
       displayHighScorePage();
     }
-    console.log('submitButton.click() finished!');
   });
 
   function displayHighScorePage() {
-    highScorePageElement.style.display = "block";
-    boxDoneWithQuizElement.style.display = "none";
+    displayOnlyThisBox(highScorePageElement);
     
     var initials = localStorage.getItem("initials");
-    console.log('localStorage.getItem.initials', initials);
     var score = localStorage.getItem("score");
-    console.log('localStorage.getItem("score")', score);
     if(!initials) {
         return;
     }
