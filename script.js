@@ -196,7 +196,7 @@ function displayDoneWithQuiz() {
 
 // Function that calls the timer 
 function countdown() {
-  timeLeft = 30;
+  timeLeft = TIME_ALLOWED_FOR_TAKING_QUIZ;
   timeLeftInterval = setInterval(function () {
     const stillTakingQuiz = (timeLeft > 0) && (0 <= questionIndex) && (questionIndex < myQuizQuestions.length);
 
