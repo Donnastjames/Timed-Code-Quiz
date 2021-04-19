@@ -146,6 +146,7 @@ function onIncorrectClicked() {
 function displayIntro() {
   timeLeft = TIME_ALLOWED_FOR_TAKING_QUIZ;
   clearInterval(timeLeftInterval);
+  totalCorrectScoreCount = 0;
   timeLeftInterval = null;
   questionIndex = 0;
   displayOnlyThisBox(introDivElement);
