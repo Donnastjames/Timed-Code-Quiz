@@ -9,16 +9,18 @@
   </head>
   <body>
     <main>
-      <div class="container1"></div>
       <div id="introDiv">
-          <h1>Coding Quiz Challenge</h1>
-              <h3>
-                Try to answer the questions correctly 30 secconds.  You get one point for each correct answer.  
-                You lose five seconds for each incorrect answer.  Good luck!
-              </h3>
-          <div class="button">
-            <button class="start-button">Start Quiz</button>
-          </div>
+        <div class="viewHighScore" onclick="displayHighScorePage()">
+          View Highscores
+        </div>
+        <h1>Coding Quiz Challenge</h1>
+        <h3>
+          Try to answer the questions correctly 30 secconds.  You get one point for each correct answer.  
+          You lose five seconds for each incorrect answer.  Good luck!
+        </h3>
+        <div class="button">
+          <button class="start-button">Start Quiz</button>
+        </div>
       </div>
 
       <div id="boxQuestion">Current question should go here.</div>
@@ -45,8 +47,8 @@
       <div id="highScorePage">
         <p>Thank you for taking the Quiz!</p>
         <div>
-          <p>Your initials: <span id="renderedInitials"></span></p>
-          <p>Your score:  <span id="yourScore">Score?</span></p>
+          <div id="renderedInitials">Initials?</div>
+          <div id="yourScore">Score?</div>
         </div>
         <button id="goBack">Go Back</button>
         <button id="clearScore">Clear Score</button>

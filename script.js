@@ -212,38 +212,47 @@ function countdown() {
   }, 1000);
 }
 
-  function displayMessage(type, message) {
-    msgDiv.textContent = message;
-    msgDiv.setAttribute("class", type);
-  }
+function displayMessage(type, message) {
+  msgDiv.textContent = message;
+  msgDiv.setAttribute("class", type);
+}
 
-  submitButton.addEventListener("click", function(event) {
-    var submittedInitials = playerInitialsInput.value;
-      
-    if (submittedInitials === "") {
-      displayMessage("Error", "Initials cannot be blank");
-    } else {
-      localStorage.setItem("initials", submittedInitials);
-      localStorage.setItem("score", totalCorrectScoreCount);
-      displayHighScorePage();
-    }
-  });
-
-  function displayHighScorePage() {
-    displayOnlyThisBox(highScorePageElement);
+submitButton.addEventListener("click", function(event) {
+  var submittedInitials = playerInitialsInput.value;
     
-    var initials = localStorage.getItem("initials");
-    var score = localStorage.getItem("score");
-    if(!initials) {
-        return;
-    }
-
-    renderedInitialsElement = document.getElementById("renderedInitials");
-    playerHighScoreElement = document.getElementById("yourScore");
-
-    renderedInitialsElement.textContent = initials;
-    playerHighScoreElement.textContent = score;
+  if (submittedInitials === "") {
+    displayMessage("Error", "Initials cannot be blank");
+  } else {
+    localStorage.setItem("initials", submittedInitials);
+    localStorage.setItem("score", totalCorrectScoreCount);
+    displayHighScorePage();
   }
+});
+
+function displayHighScorePage() {
+  displayOnlyThisBox(highScorePageElement);
+  
+  var initials = localStorage.getItem("initials");
+  var score = localStorage.getItem("score");
+
+  renderedInitialsElement = document.getElementById("renderedInitials");
+  playerHighScoreElement = document.getElementById("yourScore");
+
+  if (initials) {
+    renderedInitialsElement.textContent = `Your initials: ${initials}`; 
+    playerHighScoreElement.textContent = `Your score: ${score}`;
+  } else {
+    renderedInitialsElement.textContent = '';
+    playerHighScoreElement.textContent = '';
+  }
+  
+}
+
+clearScoreButton.addEventListener("click", function() {
+  localStorage.removeItem("initials");
+  localStorage.removeItem("score");
+  displayHighScorePage();
+});
 
 // The following code will start the quiz ...
 startQuizButton.addEventListener("click", displayCurrentQuestion);
@@ -251,3 +260,4 @@ startQuizButton.addEventListener("click", countdown);
 
 // The following code will re-start the quiz ...
 goBackAndRestartButton.addEventListener("click", displayIntro);
+
