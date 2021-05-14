@@ -1,4 +1,4 @@
-// Wait 2 milliseconds after answering a question,
+// Wait 1.5 seconds after answering a question,
 // so the user has time to see whether their answer was correct ... 
 const PAUSE_BEFORE_MOVING_ON = 1500;
 
@@ -8,7 +8,7 @@ const TIME_ALLOWED_FOR_TAKING_QUIZ = 30; // seconds
 // Start with variables that are used to keep track of
 // the progress taking this quiz ...
 
-var questionIndex = 0;
+var questionIndex = -1; // -1 means we aren't taking the quiz at this moment.
 
 var myQuizQuestions = [
   {
@@ -30,6 +30,16 @@ var myQuizQuestions = [
       question: "What is a container for storing data values?",
       possibleAnswers: ["Function", "Element", "Variable", "Object"],
       correctAnswer: "Variable",
+  },
+  {
+      question: "What are used to for storing and manipulating data?",
+      possibleAnswers: ["Strings", "Arrays", "Operators", "Objects"],
+      correctAnswer: "Strings",
+  },
+  {
+      question: "What are a template for creating objects?",
+      possibleAnswers: ["Strings", "Classes", "Operators", "Objects"],
+      correctAnswer: "Classes",
   },
 ];
 
@@ -92,10 +102,13 @@ function showIncorrectMsg() {
 }
 
 function displayTimeLeft() {
-  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
-  // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
-  timerElement.textContent = `${timeLeft} second${timeLeft === 1 ? '' : 's'} remaining`;
-  timerBoxElement.style.display = "block";
+  // We only want to show the time left, when we are still taking this quiz!
+  if (0 <= questionIndex && questionIndex < myQuizQuestions.length) {
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+    // Use the ternary operator to decide whether to show 'second' or 'seconds' down below ...
+    timerElement.textContent = `${timeLeft} second${timeLeft === 1 ? '' : 's'} remaining`;
+    timerBoxElement.style.display = "block";
+  }
 }
 
 // https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
@@ -106,16 +119,19 @@ function removeAllChildNodes(parent) {
 }
 
 function onCorrectClicked() {
- // Fixed the problem of clicking too many answers before the next question loads 
+  // Fixed the problem of clicking too many answers before the next question loads 
   if (currentlyHandlingClick) {
     return;
   }
   currentlyHandlingClick = true;
   totalCorrectScoreCount += 1;
   questionIndex += 1;
+  if (questionIndex >= myQuizQuestions.length) {
+    questionIndex = -1;
+  }
   showCorrectMsg();
   setTimeout(function () {
-    if (questionIndex < myQuizQuestions.length) {
+    if (0 <= questionIndex && questionIndex < myQuizQuestions.length) {
       displayCurrentQuestion();
     } else {
       displayDoneWithQuiz();
@@ -132,9 +148,12 @@ function onIncorrectClicked() {
   // Impose a penalty for clicking an incorrect answer ...
   timeLeft = Math.max(0, timeLeft - 5);
   questionIndex += 1;
+  if (questionIndex >= myQuizQuestions.length) {
+    questionIndex = -1;
+  }
   showIncorrectMsg();
   setTimeout(function() {
-    if (questionIndex < myQuizQuestions.length) {
+    if (0 <= questionIndex && questionIndex < myQuizQuestions.length) {
       displayCurrentQuestion();
     } else {
       displayDoneWithQuiz();
@@ -153,12 +172,12 @@ function displayIntro() {
 }
 
 function displayCurrentQuestion() {
+  if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
+    // Refuse to display any current question if we're not taking this quiz!
+    return;
+  }
   displayOnlyThisBox(boxQuestionElement);
   displayTimeLeft();
-
-  if (questionIndex < 0 || questionIndex >= myQuizQuestions.length) {
-    throw new Error('displayCurrentQuestion() called with an index out of range:', questionIndex);
-  }
 
   const currentQuestionObj = myQuizQuestions[questionIndex];
 
@@ -184,6 +203,8 @@ function displayCurrentQuestion() {
 }
 
 function displayDoneWithQuiz() {
+  // Make it very clear that we're not taking the quiz anymore ...
+  questionIndex = -1;
   // The timeLeftInterval's function must not be called after
   // the displaying the "Done with Quiz" block ...
   clearInterval(timeLeftInterval);
@@ -256,8 +277,11 @@ clearScoreButton.addEventListener("click", function() {
 });
 
 // The following code will start the quiz ...
-startQuizButton.addEventListener("click", displayCurrentQuestion);
-startQuizButton.addEventListener("click", countdown);
+startQuizButton.addEventListener("click", () => {
+  questionIndex = 0;
+  displayCurrentQuestion();
+  countdown();
+});
 
 // The following code will re-start the quiz ...
 goBackAndRestartButton.addEventListener("click", displayIntro);
